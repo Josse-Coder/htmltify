@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile Full-Width Notification</title>
+  <!-- Font Awesome CDN -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+  
+       
+        
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f9;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      color: white;
+    }
+
+    button:nth-child(1) { background-color: #007bff; }
+    button:nth-child(2) { background-color: #28a745; }
+    button:nth-child(3) { background-color: #dc3545; }
+    button:nth-child(4) { background-color: #858585; }
+    button:nth-child(5) { background-color: #ffc107; }
+    button:nth-child(6) { background-color: #000000; }
+    
+
+
+#notificationContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+
+  .notification {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 19px;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    font-size: 14px;
+    animation: bounceIn 0.4s ease-out, fadeOut 0.6s ease-in 5s forwards;
+    position: relative;
+    overflow: hidden;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+  }
+
+  .notification i {
+    font-size: 22px;
+  }
+
+  .notification.info i { color: #17a2b8; }
+  .notification.success i { color: #28a745; }
+  .notification.error i { color: #dc3545; }
+  .notification.default i { color: #4e3bf3; }
+  .notification.loading i {
+    color: #7c7c7b;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .notification .progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4.5px;
+    animation: progress 5s linear forwards;
+  }
+
+  .notification.info .progress-bar { background-color: #17a2b8; }
+  .notification.success .progress-bar { background-color: #28a745; }
+  .notification.error .progress-bar { background-color: #dc3545; }
+  .notification.default .progress-bar { background-color: #4e3bf3; }
+  .notification.loading .progress-bar { background-color: #ffffff; }
+
+  .notification.hide {
+    animation: bounceOut 0.2s ease-in forwards;
+  }
+
+  @keyframes bounceIn {
+    0% {
+      transform: translateY(100%);
+    }
+    20%{
+      transform: translateY(-10%);
+    }
+    50% {
+      transform: translateY(2%);
+    }
+    70% {
+      transform: translateY(-2%);
+    }
+    90% {
+      transform: translateY(1%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes bounceOut {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    70% {
+      transform: translateY(-10%);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+  }
+
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes progress {
+    0% {
+      width: 100%;
+    }
+    100% {
+      width: 0;
+    }
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (max-width: 768px) {
+    #notificationContainer {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .notification {
+      border-radius: 0;
+      width: 100%;
+    }
+  }
+
+  @media (min-width: 769px) {
+    .notification {
+      width: auto;
+      margin: 0 auto;
+    }
+  } 
+
+  
+  </style>
+</head>
+<body>
+  <button onclick="htmltify('This is an info message!', 'info')">Show Info</button>
+  <button onclick="htmltify('This is a success message!', 'success')">Show Success</button>
+  <button onclick="htmltify('This is an error message!', 'error')">Show Error</button>
+  <button onclick="htmltify('This is a default message!', 'default')">Show Default</button>
+  <button onclick="htmltify('Loading...', 'loading')">Show Loading</button>
+  <button onclick="closenotify()">Clear All</button>
+  <div id="notificationContainer"></div>
+
+  <script>
+ function htmltify(message, type = "default") {
+  const notificationContainer = document.getElementById("notificationContainer");
+
+  // Close any existing notification before displaying a new one
+  const existingNotification = document.querySelector(".notification");
+  if (existingNotification) {
+    existingNotification.classList.add("hide");
+    setTimeout(() => existingNotification.remove(), 500); // Match animation duration
+  }
+
+  // Icon mapping based on type
+  const icons = {
+    info: '<i class="fas fa-info-circle"></i>',
+    success: '<i class="fas fa-check-circle"></i>',
+    error: '<i class="fas fa-exclamation-circle"></i>',
+    default: '<i class="fas fa-bell"></i>',
+    loading: '<i class="fas fa-sync-alt"></i>',
+  };
+
+  // Create notification element
+  const notification = document.createElement("div");
+  notification.className = `notification ${type} bounce-up`;
+  notification.innerHTML = `
+    ${icons[type] || icons.default}
+    <span>${message}</span>
+    <div class="progress-bar"></div>
+  `;
+    
+ 
+
+  // Add notification to container
+  notificationContainer.appendChild(notification);
+
+  // Close notification when clicked
+  notification.addEventListener("click", () => {
+    notification.classList.add("hide");
+    setTimeout(() => notification.remove(), 500); // Match animation duration
+  });
+
+  // Remove notification after timeout (5 seconds)
+  setTimeout(() => {
+    notification.classList.add("hide");
+    setTimeout(() => notification.remove(), 500); // Match animation duration
+  }, 5000);
+}
+
+function closehtmltify() {
+  const notifications = document.querySelectorAll(".notification");
+notifications.forEach(notification => {
+notification.classList.add("hide");
+setTimeout(() => notification.remove(), 500); // Match animation duration
+});
+}
+  </script>
+</body>
+</html>
