@@ -37,7 +37,7 @@
    
 
 
-#notificationContainer {
+#htmltifyContainer {
     position: fixed;
     top: 0;
     left: 0;
@@ -45,7 +45,7 @@
     z-index: 1000;
   }
 
-  .notification {
+  .htmltify {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -62,20 +62,20 @@
     margin: 0 auto;
   }
 
-  .notification i {
+  .htmltify i {
     font-size: 22px;
   }
 
-  .notification.info i { color: #17a2b8; }
-  .notification.success i { color: #28a745; }
-  .notification.error i { color: #dc3545; }
-  .notification.default i { color: #4e3bf3; }
-  .notification.loading i {
+  .htmltify.info i { color: #17a2b8; }
+  .htmltify.success i { color: #28a745; }
+  .htmltify.error i { color: #dc3545; }
+  .htmltify.default i { color: #4e3bf3; }
+  .htmltify.loading i {
     color: #7c7c7b;
     animation: spin 0.8s linear infinite;
   }
 
-  .notification .progress-bar {
+  .htmltify .progress-bar {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -84,13 +84,13 @@
     animation: progress 5s linear forwards;
   }
 
-  .notification.info .progress-bar { background-color: #17a2b8; }
-  .notification.success .progress-bar { background-color: #28a745; }
-  .notification.error .progress-bar { background-color: #dc3545; }
-  .notification.default .progress-bar { background-color: #4e3bf3; }
-  .notification.loading .progress-bar { background-color: #ffffff; }
+  .htmltify.info .progress-bar { background-color: #17a2b8; }
+  .htmltify.success .progress-bar { background-color: #28a745; }
+  .htmltify.error .progress-bar { background-color: #dc3545; }
+  .htmltify.default .progress-bar { background-color: #4e3bf3; }
+  .htmltify.loading .progress-bar { background-color: #ffffff; }
 
-  .notification.hide {
+  .htmltify.hide {
     animation: bounceOut 0.2s ease-in forwards;
   }
 
@@ -158,20 +158,20 @@
   }
 
   @media (max-width: 768px) {
-    #notificationContainer {
+    #htmltifyContainer {
       width: 100%;
       margin: 0;
       padding: 0;
     }
 
-    .notification {
+    .htmltify {
       border-radius: 0;
       width: 100%;
     }
   }
 
   @media (min-width: 769px) {
-    .notification {
+    .htmltify {
       width: auto;
       margin: 0 auto;
     }
@@ -188,62 +188,62 @@
   <button onclick="htmltify('This is a default message!', 'default')">Show Default</button>
   <button onclick="htmltify('Loading...', 'loading')">Show Loading</button>
   <button onclick="closehtmltify()">Clear All</button>
-  <div id="notificationContainer"></div>
+  <div id="htmltifyContainer"></div>
 
   <script>
-   function htmltify(message, type = "default") {
-  const notificationContainer = document.getElementById("notificationContainer");
+  function htmltify(message, type = "default") {
+    const notificationContainer = document.getElementById("htmltifyContainer");
 
-  // Close any existing notification before displaying a new one
-  const existingNotification = document.querySelector(".notification");
-  if (existingNotification) {
-    existingNotification.classList.add("hide");
-    setTimeout(() => existingNotification.remove(), 500); // Match animation duration
+    // Close any existing notification before displaying a new one
+    const existingNotification = document.querySelector(".htmltify");
+    if (existingNotification) {
+      existingNotification.classList.add("hide");
+      setTimeout(() => existingNotification.remove(), 500); // Match animation duration
+    }
+
+    // Icon mapping based on type
+    const icons = {
+      info: '<i class="fas fa-info-circle"></i>',
+      success: '<i class="fas fa-check-circle"></i>',
+      error: '<i class="fas fa-exclamation-circle"></i>',
+      default: '<i class="fas fa-bell"></i>',
+      loading: '<i class="fas fa-sync-alt"></i>',
+    };
+
+    // Create notification element
+    const notification = document.createElement("div");
+    notification.className = `htmltify ${type} bounce-in`;
+    notification.innerHTML = `
+      ${icons[type] || icons.default}
+      <span>${message}</span>
+      <div class="progress-bar"></div>
+    `;
+      
+   
+
+    // Add notification to container
+    notificationContainer.appendChild(notification);
+
+    // Close notification when clicked
+    notification.addEventListener("click", () => {
+      notification.classList.add("hide");
+      setTimeout(() => notification.remove(), 500); // Match animation duration
+    });
+
+    // Remove notification after timeout (5 seconds)
+    setTimeout(() => {
+      notification.classList.add("hide");
+      setTimeout(() => notification.remove(), 500); // Match animation duration
+    }, 5000);
   }
 
-  // Icon mapping based on type
-  const icons = {
-    info: '<i class="fas fa-info-circle"></i>',
-    success: '<i class="fas fa-check-circle"></i>',
-    error: '<i class="fas fa-exclamation-circle"></i>',
-    default: '<i class="fas fa-bell"></i>',
-    loading: '<i class="fas fa-sync-alt"></i>',
-  };
-
-  // Create notification element
-  const notification = document.createElement("div");
-  notification.className = `notification ${type} bounce-down`;
-  notification.innerHTML = `
-    ${icons[type] || icons.default}
-    <span>${message}</span>
-    <div class="progress-bar"></div>
-  `;
-    
- 
-
-  // Add notification to container
-  notificationContainer.appendChild(notification);
-
-  // Close notification when clicked
-  notification.addEventListener("click", () => {
-    notification.classList.add("hide");
-    setTimeout(() => notification.remove(), 500); // Match animation duration
-  });
-
-  // Remove notification after timeout (5 seconds)
-  setTimeout(() => {
-    notification.classList.add("hide");
-    setTimeout(() => notification.remove(), 500); // Match animation duration
-  }, 5000);
-}
-
-function closehtmltify() {
-  const notifications = document.querySelectorAll(".notification");
+  function closehtmltify() {
+    const notifications = document.querySelectorAll(".htmltify");
 notifications.forEach(notification => {
-notification.classList.add("hide");
-setTimeout(() => notification.remove(), 500); // Match animation duration
+  notification.classList.add("hide");
+  setTimeout(() => notification.remove(), 500); // Match animation duration
 });
-}
+  }
   </script>
 </body>
 </html>
