@@ -35,12 +35,16 @@
    
 
 
+  
+
+
   #htmltifyContainer {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100%;
+    right: 12px;
     z-index: 1000;
+    margin-top: 9px;
+
   }
 
   .htmltify {
@@ -57,8 +61,9 @@
     overflow: hidden;
     max-width: 100%;
     box-sizing: border-box;
-    margin: 0 auto;
+    margin: 0 auto; /* Menambah margin bawah agar ada jarak antar notifikasi */
   }
+  
 
   .htmltify i {
     font-size: 22px;
@@ -124,7 +129,7 @@
     }
     100% {
       transform: translateX(100%);
-      opacity: 1;
+      opacity: 0;
     }
   }
 
@@ -160,11 +165,51 @@
       width: 100%;
       margin: 0;
       padding: 0;
+      right: 0;
+      
+
     }
 
     .htmltify {
       border-radius: 0;
       width: 100%;
+      margin: 0 auto;
+     
+    }
+    @keyframes bounceIn {
+      0% {
+        transform: translateX(100%);
+      }
+      20%{
+        transform: translateX(-10%);
+      }
+      50% {
+        transform: translateX(2%);
+      }
+      70% {
+        transform: translateX(-2%);
+      }
+      90% {
+        transform: translateX(1%);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+  
+    @keyframes bounceOut {
+      0% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      70% {
+        transform: translateX(-10%);
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(100%);
+        opacity: 1;
+      }
     }
   }
 
@@ -172,9 +217,11 @@
     .htmltify {
       width: auto;
       margin: 0 auto;
+     
     }
   } 
 
+  
   
   </style>
 </head>
